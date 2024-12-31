@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const registerFormSchema = z
+export const signUpFormSchema = z
   .object({
     name: z
-      .string({ required_error: "Namme is required" })
+      .string({ required_error: "Name is required" })
       .min(2, { message: "Name too short" })
       .max(30, { message: "Name too long" }),
     email: z
@@ -13,7 +13,7 @@ export const registerFormSchema = z
       .email({ message: "Invalid email address" }),
     password: z
       .string()
-      .min(8, { message: "Password must be atleast 8 characters" })
+      .min(8, { message: "Password must be at least 8 characters" })
       .max(100, { message: "Password cannot be more than 100 characters" }),
     confirmPassword: z
       .string()
@@ -30,4 +30,4 @@ export const registerFormSchema = z
     }
   });
 
-export interface RegisterFormSchema extends z.infer<typeof registerFormSchema> {}
+export interface SignUpFormSchema extends z.infer<typeof signUpFormSchema> {}

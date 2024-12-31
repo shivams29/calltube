@@ -19,16 +19,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { ROUTES } from "@/app/constants/routes";
 import { Separator } from "@/components/ui/separator";
 import { LoginFormSchema, loginFormSchema } from "./loginFormSchema";
+import Link from "next/link";
+import { login } from "../actions";
 
 export default function Page() {
-  const router = useRouter();
-
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -38,10 +36,8 @@ export default function Page() {
   });
 
   const onSubmit = (values: LoginFormSchema) => {
-    console.log(values);
+    login(values);
   };
-
-  const handleRegisterClick = () => router.push(ROUTES.AUTH.REGISTER);
 
   return (
     <Form {...form}>
@@ -86,14 +82,11 @@ export default function Page() {
               Login
             </Button>
             <Separator />
-            <Button
-              className="w-full"
-              type="button"
-              variant="outline"
-              onClick={handleRegisterClick}
-            >
-              Register
-            </Button>
+            <Link href={ROUTES.AUTH.SIGNUP} className="w-full">
+              <Button className="w-full" type="button" variant="outline">
+                Sign Up
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
       </form>
