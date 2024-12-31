@@ -19,16 +19,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { ROUTES } from "@/app/constants/routes";
-import { RegisterFormSchema, registerFormSchema } from "./registerFormSchema";
+import { SignUpFormSchema, signUpFormSchema } from "./signUpFormSchema";
+import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import { signup } from "../actions";
 
 export default function Page() {
-  const router = useRouter();
-  const form = useForm<RegisterFormSchema>({
-    resolver: zodResolver(registerFormSchema),
+  const form = useForm<SignUpFormSchema>({
+    resolver: zodResolver(signUpFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -37,12 +37,8 @@ export default function Page() {
     },
   });
 
-  const onSubmit = (values: RegisterFormSchema) => {
-    console.log(values);
-  };
-
-  const handleLoginClick = () => {
-    router.push(ROUTES.AUTH.LOGIN);
+  const onSubmit = (values: SignUpFormSchema) => {
+    signup(values);
   };
 
   return (
@@ -50,8 +46,8 @@ export default function Page() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">Register</CardTitle>
-            <CardDescription>Enter the details below to register</CardDescription>
+            <CardTitle className="text-2xl">Sign Up</CardTitle>
+            <CardDescription>Enter the details below to sign up</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-6">
             <FormField
@@ -109,11 +105,14 @@ export default function Page() {
           </CardContent>
           <CardFooter className="flex flex-col gap-3">
             <Button className="w-full" type="submit">
-              Register
+              Sign Up
             </Button>
-            <Button className="w-full" variant="outline" type="button" onClick={handleLoginClick}>
-              Login
-            </Button>
+            <Separator />
+            <Link href={ROUTES.AUTH.LOGIN} className="w-full">
+              <Button className="w-full" variant="outline" type="button">
+                Login
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
       </form>
