@@ -43,6 +43,11 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = ROUTES.AUTH.LOGIN;
     return NextResponse.redirect(url);
+  } else if (user && request.nextUrl.pathname.startsWith("/auth")) {
+    // user is already logged in so redirect to dashboard
+    const url = request.nextUrl.clone();
+    url.pathname = ROUTES.DASHBOARD.HOME;
+    return NextResponse.redirect(url);
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
