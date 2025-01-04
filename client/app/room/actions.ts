@@ -23,14 +23,24 @@ export const createRoom = async () => {
   }
 };
 
-export const joinRoom = async (roomId: string) => {
+export const getRoomDetails = async (roomId: string) => {
   const supabase = createClient();
   const { data, error } = await supabase.from("rooms").select("*").eq("id", roomId);
 
   if (error || !data.length) {
-    return { error };
+    return { error, room: null };
   } else {
     const room = data[0];
+    return { error, room };
+  }
+};
+
+export const joinRoom = async (roomId: string) => {
+  const { error, room } = await getRoomDetails(roomId);
+
+  if (error || !room) {
+    return { error };
+  } else {
     redirect(getDynamicRoute(ROUTES.ROOM.DETAIL, { id: room.id }));
   }
 };
