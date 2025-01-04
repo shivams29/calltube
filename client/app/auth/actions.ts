@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "../lib/supabase/server";
 import { SignUpFormSchema } from "./signup/signUpFormSchema";
 import { LoginFormSchema } from "./login/loginFormSchema";
+import { ROUTES } from "../constants/routes";
 
 export async function login(formData: LoginFormSchema) {
   const supabase = await createClient();
@@ -12,11 +13,11 @@ export async function login(formData: LoginFormSchema) {
   const { error } = await supabase.auth.signInWithPassword(formData);
 
   if (error) {
-    redirect("/error");
+    redirect(ROUTES.ERROR.GENERIC);
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect(ROUTES.DASHBOARD.HOME);
 }
 
 export async function signup(formData: SignUpFormSchema) {
@@ -32,9 +33,21 @@ export async function signup(formData: SignUpFormSchema) {
     },
   });
   if (error) {
-    redirect("/error");
+    redirect(ROUTES.ERROR.GENERIC);
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect(ROUTES.DASHBOARD.HOME);
+}
+
+export async function logout() {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    redirect(ROUTES.ERROR.GENERIC);
+  }
+
+  revalidatePath("/", "layout");
+  redirect(ROUTES.AUTH.LOGIN);
 }
